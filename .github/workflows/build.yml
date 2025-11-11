@@ -16,6 +16,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y android-sdk aapt zipalign apksigner
+        env:
+          ANDROID_HOME: /usr/lib/android-sdk
       - name: Build APK
         run: |
           bash build.sh
@@ -23,3 +25,5 @@ jobs:
         with:
           name: MyApp
           path: bin/MyApp.apk
+env:
+  ANDROID_HOME: /usr/lib/android-sdk
