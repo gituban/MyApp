@@ -1,0 +1,24 @@
+name: Build APK
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+      - name: Install Android Build Tools
+        run: |
+          sudo apt update
+          sudo apt install -y android-sdk aapt zipalign apksigner
+      - name: Build APK
+        run: |
+          bash build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyApp
+          path: bin/MyApp.apk
