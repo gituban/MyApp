@@ -10,6 +10,7 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
+          distribution: 'temurin'
           java-version: '17'
       - name: Install Android Build Tools
         run: |
