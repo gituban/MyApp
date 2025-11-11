@@ -9,7 +9,9 @@ SRC_DIR="$BUILD_DIR/src"
 BIN_DIR="$BUILD_DIR/bin"
 OBJ_DIR="$BUILD_DIR/obj"
 ANDROID_JAR="$ANDROID_HOME/platforms/android-34/android.jar"
-BUILD_TOOLS="$ANDROID_HOME/build-tools/34.0.0"
+
+# pilih versi build-tools terbaru yang tersedia
+BUILD_TOOLS=$(ls -d $ANDROID_HOME/build-tools/* | sort -r | head -n 1)
 
 mkdir -p "$BIN_DIR" "$OBJ_DIR"
 
@@ -18,7 +20,17 @@ find "$SRC_DIR" -name "*.java" > sources.txt
 javac -d "$OBJ_DIR" -source 1.8 -target 1.8 -bootclasspath "$ANDROID_JAR" @"sources.txt"
 
 echo "[2] Converting to DEX..."
-"$BUILD_TOOLS/d8" --output "$BIN_DIR" "$OBJ_DIR"
+if [ -x "$BUILD_TOOLS/dx" ]; then
+    echo "→ Using dx"
+    "$BUILD_TOOLS/dx" --dex --output="$BIN_DIR/classes.dex" "$OBJ_DIR"
+elif [ -f "$BUILD_TOOLS/lib/d8.jar" ]; then
+    echo "→ Using d8.jar"
+    java -cp "$BUILD_TOOLS/lib/d8.jar" com.android.tools.r8.D8 \
+      --output "$BIN_DIR" "$OBJ_DIR"
+else
+    echo "❌ Neither dx nor d8 found!"
+    exit 1
+fi
 
 echo "[3] Packaging APK..."
 "$BUILD_TOOLS/aapt" package -f -m -F "$BIN_DIR/$APP_NAME.unsigned.apk" \
