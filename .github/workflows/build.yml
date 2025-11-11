@@ -8,8 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANDROID_HOME: /usr/local/lib/android/sdk
-      PATH: $PATH:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/34.0.0
+      env:
+        ANDROID_HOME: /usr/local/lib/android/sdk
+        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/34.0.0
 
     steps:
       - uses: actions/checkout@v4
