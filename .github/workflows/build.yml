@@ -14,8 +14,8 @@ jobs:
           java-version: '17'
       - name: Install Android Build Tools
         run: |
-          sudo apt update
-          sudo apt install -y android-sdk aapt zipalign apksigner
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq android-sdk aapt zipalign apksigner
         env:
           ANDROID_HOME: /usr/lib/android-sdk
       - name: Build APK
