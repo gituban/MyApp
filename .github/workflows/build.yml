@@ -2,28 +2,36 @@ name: Build APK
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      PATH: $PATH:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/34.0.0
+
     steps:
       - uses: actions/checkout@v4
-      - name: Setup JDK
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Install Android Build Tools
+
+      - name: Verify Android SDK tools
         run: |
-          sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq android-sdk aapt zipalign apksigner
-        env:
-          ANDROID_HOME: /usr/lib/android-sdk
-      - name: Build APK
-        run: |
-          bash build.sh
-      - uses: actions/upload-artifact@v4
+          echo "Checking SDK tools..."
+          aapt version
+          apksigner --version
+          zipalign -v
+
+      - name: Run build script
+        run: bash build.sh
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
         with:
           name: MyApp
           path: bin/MyApp.apk
-env:
-  ANDROID_HOME: /usr/lib/android-sdk
