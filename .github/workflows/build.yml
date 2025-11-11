@@ -6,11 +6,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+ 
     env:
-      env:
-        ANDROID_HOME: /usr/local/lib/android/sdk
-        PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/34.0.0
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/lib/android/sdk/platform-tools:/usr/local/lib/android/sdk/build-tools/34.0.0
 
     steps:
       - uses: actions/checkout@v4
